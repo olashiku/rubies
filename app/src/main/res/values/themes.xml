@@ -1,0 +1,16 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Theme.RubiesNigeria" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="android:statusBarColor">@color/black</item>
+        <item name="android:windowSplashScreenBackground" tools:targetApi="s">@color/white</item>
+
+    </style>
+
+    <style name="BottomNavigationViewTextStyleActive">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="BottomNavigationViewTextStyleInactive">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+</resources>

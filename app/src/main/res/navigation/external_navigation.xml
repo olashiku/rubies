@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/splashScreenFragment"
-        android:name="com.qucoon.rubiesnigeria.fragment.external.SplashScreenFragment"
+        android:name="com.qucoon.rubiesnigeria.fragment.external.splash.SplashScreenFragment"
         android:label="fragment_splash_screen"
         tools:layout="@layout/fragment_splash_screen" >
         <action
@@ -20,7 +20,7 @@
     <include app:graph="@navigation/navigation" />
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.qucoon.rubiesnigeria.fragment.external.RegisterFragment"
+        android:name="com.qucoon.rubiesnigeria.fragment.external.register.views.RegisterFragment"
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" >
         <action

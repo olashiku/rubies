@@ -1,4 +1,4 @@
-package com.qucoon.rubiesnigeria.fragment.external
+package com.qucoon.rubiesnigeria.fragment.external.splash
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.qucoon.rubiesnigeria.AuthenticationViewModel
 import com.qucoon.rubiesnigeria.BuildConfig
 import com.qucoon.rubiesnigeria.R
@@ -17,7 +18,6 @@ import com.qucoon.rubiesnigeria.utils.Utils
 
 class SplashScreenFragment : BaseFragment() {
     lateinit var binding: FragmentSplashScreenBinding
-    private val viewModel: AuthenticationViewModel by viewModels()
 
 
     override fun onCreateView(
@@ -30,22 +30,22 @@ class SplashScreenFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        showBottomNavigation(false)
         setupTextView()
         checkLoginStatus()
     }
 
     private fun checkLoginStatus() {
         Utils.delayTimer {
-            if (viewModel.firstTimeLogin) {
-                openFragment(R.id.action_splashScreenFragment_to_registerFragment)
-            } else {
-                openFragment(R.id.action_splashScreenFragment_to_navigation)
-            }
+            launchScreen()
         }
-
     }
 
-
+    private fun launchScreen(){
+         lifecycleScope.launchWhenResumed {
+             openFragment(R.id.action_splashScreenFragment_to_registerFragment)
+         }
+     }
 
     private fun setupTextView() {
         binding.versionText.text = getString(R.string.version_text, BuildConfig.VERSION_NAME)

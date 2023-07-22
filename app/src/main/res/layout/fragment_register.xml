@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragment.external.RegisterFragment">
+    tools:context=".fragment.external.register.views.RegisterFragment">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/leftGuidelines"
@@ -19,6 +19,183 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_end="24dp" />
+
+
+    <Button
+        android:id="@+id/backButton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="25dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/back_image"
+        app:layout_constraintBottom_toBottomOf="@+id/backButton"
+        app:layout_constraintEnd_toEndOf="@+id/backButton"
+        app:layout_constraintHorizontal_bias="0.88"
+        app:layout_constraintStart_toStartOf="@+id/backButton"
+        app:layout_constraintTop_toTopOf="@+id/backButton" />
+
+    <TextView
+        android:id="@+id/textViewTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:fontFamily="@font/br_firma_bold"
+        android:text="@string/personal_details"
+        android:textColor="@color/blackish"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/rightGuidelines"
+        app:layout_constraintStart_toStartOf="@+id/leftGuidelines"
+        app:layout_constraintTop_toBottomOf="@+id/backButton" />
+
+    <TextView
+        android:id="@+id/textViewSubTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/br_firma_light"
+        android:text="@string/enter_personal_details"
+        android:textColor="@color/grayish"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toStartOf="@+id/rightGuidelines"
+        app:layout_constraintStart_toStartOf="@+id/leftGuidelines"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTitle"
+        app:lineHeight="23sp" />
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/firstNameInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="10dp"
+        android:background="@color/edit_text_color"
+        android:hint="@string/first_name"
+        app:boxStrokeWidth="0dp"
+        app:boxStrokeWidthFocused="0dp"
+        android:textColorHint="@color/grayish"
+        app:boxBackgroundColor="@color/blackish"
+        app:hintTextColor="@color/blackish"
+        app:layout_constraintEnd_toStartOf="@+id/lastNameInputLayout"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/leftGuidelines"
+        app:layout_constraintTop_toBottomOf="@+id/textViewSubTitle"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.rounded8dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/firstNameEditText"
+            android:layout_width="match_parent"
+            android:textSize="14sp"
+            android:backgroundTint="@color/edit_text_color"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/br_firma_regular"
+            android:background="@drawable/edit_text_background"
+            android:imeOptions="actionNext"
+            android:inputType="text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/lastNameInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="24dp"
+        android:background="@color/white"
+        android:hint="@string/last_name"
+        android:textColorHint="@color/grayish"
+        app:boxBackgroundColor="@android:color/transparent"
+        app:boxStrokeWidth="0dp"
+        app:boxStrokeWidthFocused="0dp"
+        app:hintEnabled="true"
+        app:hintTextColor="@color/blackish"
+        app:layout_constraintEnd_toStartOf="@+id/rightGuidelines"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/firstNameInputLayout"
+        app:layout_constraintTop_toBottomOf="@+id/textViewSubTitle"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.rounded8dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/lastNameEditText"
+            android:layout_width="match_parent"
+            android:textSize="14sp"
+            android:backgroundTint="@color/edit_text_color"
+
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/br_firma_regular"
+            android:background="@drawable/edit_text_background"
+            android:imeOptions="actionNext"
+            android:inputType="text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/phoneInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:background="@color/white"
+        android:hint="@string/phone_number"
+        android:textColorHint="@color/grayish"
+        app:boxBackgroundColor="@android:color/transparent"
+        app:boxStrokeWidth="0dp"
+        app:boxStrokeWidthFocused="0dp"
+        app:hintEnabled="true"
+        app:hintTextColor="@color/blackish"
+        app:layout_constraintEnd_toStartOf="@+id/rightGuidelines"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/leftGuidelines"
+        app:layout_constraintTop_toBottomOf="@+id/firstNameInputLayout"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.rounded8dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/phoneNumberEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edit_text_background"
+            android:backgroundTint="@color/edit_text_color"
+            android:fontFamily="@font/br_firma_regular"
+            android:imeOptions="actionDone"
+            android:inputType="phone"
+            android:textSize="14sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/proceedButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="50dp"
+        android:backgroundTint="@color/blackish"
+        android:fontFamily="@font/br_firma_regular"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:stateListAnimator="@null"
+        android:text="@string/proceed"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        app:cornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/rightGuidelines"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/leftGuidelines"
+        app:layout_constraintTop_toBottomOf="@+id/phoneInputLayout"
+        app:layout_constraintVertical_bias="1.0" />
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

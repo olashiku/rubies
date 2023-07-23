@@ -251,4 +251,6 @@ class MyViewPageStateAdapter(fm: FragmentManager): FragmentStatePagerAdapter(fm)
         fragmentList.add(fragment)
         fragmentTitleList.add(title)
     }
+
+
 }

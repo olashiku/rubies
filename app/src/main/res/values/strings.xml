@@ -40,4 +40,9 @@
     </string-array>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="login_details">Login Details</string>
+    <string name="input_login_details">Kindly input your login details to proceed</string>
+    <string name="lost_connection">Network Connection lost</string>
+    <string name="login">Login</string>
+    <string name="no_account">Don\'t have an account? please register.</string>
 </resources>

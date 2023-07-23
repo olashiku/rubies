@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.external.register.views.RegisterFragment">
+    tools:context=".views.fragment.external.register.view.RegisterFragment">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/leftGuidelines"
@@ -178,13 +178,14 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="16dp"
         android:backgroundTint="@color/blackish"
         android:fontFamily="@font/br_firma_regular"
         android:insetTop="0dp"
         android:insetBottom="0dp"
         android:stateListAnimator="@null"
         android:text="@string/proceed"
+        android:enabled="false"
         android:textAllCaps="false"
         android:textColor="@color/white"
         app:cornerRadius="10dp"
@@ -193,7 +194,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/leftGuidelines"
         app:layout_constraintTop_toBottomOf="@+id/phoneInputLayout"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.90999997" />
 
 
 

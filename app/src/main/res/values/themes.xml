@@ -18,4 +18,8 @@
         <item name="cornerFamily">rounded</item>
     </style>
 
+    <style name="CustomDialogTheme">
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
 </resources>

@@ -1,5 +1,7 @@
 package com.qucoon.rubiesnigeria.network
 
+import com.qucoon.rubiesnigeria.storage.PaperPrefs
+import com.qucoon.rubiesnigeria.storage.getStringPref
 import io.ktor.client.*
 import io.ktor.client.engine.android.*
 import io.ktor.client.engine.cio.*
@@ -10,9 +12,13 @@ import io.ktor.client.features.logging.*
 import io.ktor.client.features.websocket.*
 import io.ktor.client.request.*
 import kotlinx.serialization.json.Json
+import org.koin.java.KoinJavaComponent
 
 
 class NetworkProvider {
+
+    val paperPref: PaperPrefs by KoinJavaComponent.inject(PaperPrefs::class.java)
+
     var client = HttpClient(Android) {
         install(Logging) {
             level = LogLevel.ALL
@@ -23,7 +29,7 @@ class NetworkProvider {
 
         defaultRequest {
             header("Content-Type", "application/json")
-            header("Authorization","Bearer 6746754575546")
+            header("Authorization",paperPref.getStringPref(PaperPrefs.AUTHORIZATION_TOKEN))
         }
 
         install(HttpTimeout) {
@@ -34,9 +40,13 @@ class NetworkProvider {
     }
 
     val socketClient = HttpClient(CIO) {
-        install(WebSockets)
+        install(WebSockets){
+        }
         install(Logging) {
             level = LogLevel.ALL
+        }
+        defaultRequest {
+            header("Authorization",paperPref.getStringPref(PaperPrefs.AUTHORIZATION_TOKEN))
         }
     }
 }

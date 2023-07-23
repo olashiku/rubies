@@ -1,14 +1,16 @@
 package com.qucoon.rubiesnigeria.base
 
 import android.content.Context
-import android.os.Bundle
 import android.view.Gravity
-import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
-import com.qucoon.rubiesnigeria.R
-import com.qucoon.rubiesnigeria.activity.MainActivity
+import com.qucoon.rubiesnigeria.repository.rest.WorkerRepository
+import com.qucoon.rubiesnigeria.storage.room.data_source.ContactsDataSource
+import com.qucoon.rubiesnigeria.utils.CustomProgressDialog
+import com.qucoon.rubiesnigeria.views.activity.MainActivity
+import org.koin.android.ext.android.inject
 
 interface NavigationActions {
     fun openFragment(action: Int, showBottomNavigation: Boolean = false)
@@ -17,15 +19,51 @@ interface NavigationActions {
 }
 
 open class BaseFragment : Fragment(), NavigationActions {
-    private var loadingMessage: String? = null
+
+    private val progressDialog by lazy { CustomProgressDialog(requireContext()) }
+    private val workerRepository: WorkerRepository by inject()
+     val contactsDataSource: ContactsDataSource by inject()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+
+    fun showLoaderDialog(status: Boolean) {
+        println("final_status $status")
+        if (status) {
+            progressDialog.start("please wait")
+        } else {
+            progressDialog.stop()
+        }
     }
+
+    fun getContacts(){
+       if((activity as MainActivity).checkForPermission()){
+           workerRepository.getAllContacts()
+       }
+    }
+
+    fun setupObserver(baseSocketViewModel: BaseSocketViewModel) {
+
+    }
+
+     private fun setupErrorMessage(errorMessage: MutableLiveData<String>) {
+         errorMessage.observe(this) {
+             showToast(it)
+         }
+     }
+
+    private fun setupLoading(showLoading: MutableLiveData<Boolean>) {
+        showLoading.observe(this) {
+            showLoaderDialog(it)
+        }
+    }
+     fun makeActiveCalls(action:()->Unit){
+         (activity as MainActivity).makeSocketCall{
+             action.invoke()
+         }
+     }
 
     override fun openFragment(action: Int, showBottomNavigation: Boolean) {
         findNavController().navigate(action)

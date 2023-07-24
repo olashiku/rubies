@@ -1,49 +1,69 @@
 package com.qucoon.rubiesnigeria.viewmodel
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.qucoon.rubiesnigeria.base.BaseSocketViewModel
+import com.qucoon.rubiesnigeria.model.contacts.Contactslist
+import com.qucoon.rubiesnigeria.model.request.fetchfriends.FetchFriendsRequest
 import com.qucoon.rubiesnigeria.model.request.login.LoginRequest
 import com.qucoon.rubiesnigeria.model.request.signup.SignupRequest
+import com.qucoon.rubiesnigeria.model.response.addfriend.AddFriendResponse
+import com.qucoon.rubiesnigeria.model.response.fetchfriends.FetchFriendsResponse
 import com.qucoon.rubiesnigeria.model.response.login.LoginResponse
 import com.qucoon.rubiesnigeria.model.response.signup.SignupResponse
 import com.qucoon.rubiesnigeria.network.EndPoints
 import com.qucoon.rubiesnigeria.network.SingleLiveEvent
 import com.qucoon.rubiesnigeria.repository.socket.SocketRepository
 import com.qucoon.rubiesnigeria.storage.PaperPrefs
+import com.qucoon.rubiesnigeria.storage.room.data_source.ContactsDataSource
 import com.qucoon.rubiesnigeria.storage.savePref
 import com.qucoon.rubiesnigeria.utils.Constant
 import kotlinx.coroutines.launch
 
-class AuthViewModel(val socketRepository: SocketRepository) : BaseSocketViewModel() {
+class AuthViewModel(val socketRepository: SocketRepository,val contactsDataSource: ContactsDataSource) : BaseSocketViewModel() {
 
-    private val loadingEndpoint = setOf(EndPoints.LOGIN_ACTION, EndPoints.SIGNUP_ACTION)
+    private val loadingEndpoint = setOf(EndPoints.LOGIN_ACTION, EndPoints.SIGNUP_ACTION,EndPoints.ADD_FRIEND_ACTION)
+
     val loginResponse = SingleLiveEvent<LoginResponse>()
     val signupResponse = SingleLiveEvent<SignupResponse>()
-    val showLoading = MutableLiveData<Boolean>()
+    val addFriendResponse = SingleLiveEvent<AddFriendResponse>()
+    var userPhone = ""
 
-    fun openConnection(){
+    fun openConnection() {
         openSocketConnection(socketRepository::openSocket)
     }
 
     fun login(phoneNumber: String) {
+        userPhone = phoneNumber
+        val phone = phoneNumber.drop(1)
         showLoading.value = true
-        sendMessage(LoginRequest(EndPoints.LOGIN_ACTION, phoneNumber), socketRepository::sendMessage)
+        sendMessage(
+            LoginRequest(EndPoints.LOGIN_ACTION, "234$phone"),
+            socketRepository::sendMessage
+        )
     }
 
-     fun register(phoneNumber: String,firstName:String,lastName:String){
-         showLoading.value = true
-         val name = "$firstName $lastName"
-         sendMessage(SignupRequest(EndPoints.SIGNUP_ACTION, name,phoneNumber), socketRepository::sendMessage)
+     fun fetchFriends(){
+         sendMessage(FetchFriendsRequest(EndPoints.FETCH_FRIEND_ACTION),socketRepository::sendMessage)
      }
+
+    fun register(phoneNumber: String, firstName: String, lastName: String) {
+        showLoading.value = true
+        val name = "$firstName $lastName"
+        val phone = phoneNumber.drop(1)
+        sendMessage(
+            SignupRequest(EndPoints.SIGNUP_ACTION, name, "234$phone"),
+            socketRepository::sendMessage
+        )
+    }
+
+
 
     fun observeResponse() {
         val result = observeSessionFlowResponse(socketRepository::observeRequest)
         viewModelScope.launch {
             result?.collect { data ->
                 if (loadingEndpoint.contains(getSocketAction(data))) {
-                    showLoading.value = false
                     performLoadingProcesses(data)
                 } else {
                     performRegularProcesses(data)
@@ -53,7 +73,7 @@ class AuthViewModel(val socketRepository: SocketRepository) : BaseSocketViewMode
     }
 
     fun performLoadingProcesses(data: String) {
-
+        showLoading.value = false
         when (getSocketAction(data)) {
             EndPoints.LOGIN_ACTION -> {
                 loginOperations(data)
@@ -61,30 +81,55 @@ class AuthViewModel(val socketRepository: SocketRepository) : BaseSocketViewMode
             EndPoints.SIGNUP_ACTION -> {
                 registerOperations(data)
             }
+            EndPoints.ADD_FRIEND_ACTION -> {
+                addFriendsOperations(data)
+            }
         }
     }
 
-    fun performRegularProcesses(data: String) {
+     fun addFriendsOperations(data: String){
+         val response = Gson().fromJson(data, AddFriendResponse::class.java)
+         if (response.responseCode.equals(Constant.success_code)) {
+             addFriendResponse.value = response
+         } else {
+             errorMessage.value = response.responseMessage
+         }
+     }
 
+    fun performRegularProcesses(data: String) {
+        when (getSocketAction(data)) {
+            EndPoints.FETCH_FRIEND_ACTION -> {
+                fetchFriendsOperation(data)
+            }
+        }
     }
+
+     fun fetchFriendsOperation(data: String) {
+         val response = Gson().fromJson(data, FetchFriendsResponse::class.java)
+         viewModelScope.launch {
+             response.friends.forEach{
+                 contactsDataSource.updateContact(Contactslist(0,it.userName,it.userId,Constant.yes))
+             }
+         }
+     }
 
 
     private fun loginOperations(data: String) {
-        val response = Gson().fromJson(data,LoginResponse::class.java)
-        if(response.responseCode.equals(Constant.success_code)){
+        val response = Gson().fromJson(data, LoginResponse::class.java)
+        if (response.responseCode.equals(Constant.success_code)) {
             loginResponse.value = response
+            paperPrefs.savePref(PaperPrefs.USER_PHONE, userPhone)
             paperPrefs.savePref(PaperPrefs.AUTHORIZATION_TOKEN, response.token)
-        }else {
+        } else {
             errorMessage.value = response.responseMessage
         }
     }
 
     private fun registerOperations(data: String) {
-        val response = Gson().fromJson(data,SignupResponse::class.java)
-        signupResponse.value = response
-        if(response.responseCode.equals(Constant.success_code)){
+        val response = Gson().fromJson(data, SignupResponse::class.java)
+        if (response.responseCode.equals(Constant.success_code)) {
             signupResponse.value = response
-        }else {
+        } else {
             errorMessage.value = response.responseMessage
         }
     }

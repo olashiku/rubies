@@ -73,6 +73,7 @@ open class BaseSocketRepository(val networkProvider: NetworkProvider) : ChatSock
 
     override suspend fun sendSocketMessage(message: String) {
         try {
+            println("expecting_string_outgoing $message")
             socket?.send(Frame.Text(message))
         } catch (ex: Exception) {
             ex.printStackTrace()

@@ -8,6 +8,7 @@ interface ContactsDataSource {
     fun getContacts():LiveData<List<Contactslist>>
     fun deleteAllContacts()
     fun updateContacts(contact:  List<Contactslist>)
+    fun updateContact(contact:Contactslist)
 }
  class ContactsDataSourceImpl(val contactsDao: ContactsDao):ContactsDataSource{
      override fun getContacts(): LiveData<List<Contactslist>> {
@@ -20,6 +21,10 @@ interface ContactsDataSource {
 
      override fun updateContacts(contact: List<Contactslist>) {
          contactsDao.updateContacts(contact)
+     }
+
+     override fun updateContact(contact: Contactslist) {
+         contactsDao.updateContact(contact)
      }
 
  }

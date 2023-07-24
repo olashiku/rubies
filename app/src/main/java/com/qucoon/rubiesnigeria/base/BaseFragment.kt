@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import com.qucoon.rubiesnigeria.repository.rest.WorkerRepository
+import com.qucoon.rubiesnigeria.storage.PaperPrefs
 import com.qucoon.rubiesnigeria.storage.room.data_source.ContactsDataSource
 import com.qucoon.rubiesnigeria.utils.CustomProgressDialog
 import com.qucoon.rubiesnigeria.views.activity.MainActivity
@@ -20,6 +21,7 @@ interface NavigationActions {
 
 open class BaseFragment : Fragment(), NavigationActions {
 
+    val paperPrefs: PaperPrefs by inject()
     private val progressDialog by lazy { CustomProgressDialog(requireContext()) }
     private val workerRepository: WorkerRepository by inject()
      val contactsDataSource: ContactsDataSource by inject()
@@ -30,9 +32,8 @@ open class BaseFragment : Fragment(), NavigationActions {
 
 
     fun showLoaderDialog(status: Boolean) {
-        println("final_status $status")
         if (status) {
-            progressDialog.start("please wait")
+            progressDialog.start()
         } else {
             progressDialog.stop()
         }
@@ -45,7 +46,8 @@ open class BaseFragment : Fragment(), NavigationActions {
     }
 
     fun setupObserver(baseSocketViewModel: BaseSocketViewModel) {
-
+        setupErrorMessage(baseSocketViewModel.errorMessage)
+        setupLoading(baseSocketViewModel.showLoading)
     }
 
      private fun setupErrorMessage(errorMessage: MutableLiveData<String>) {

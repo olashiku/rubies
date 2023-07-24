@@ -7,6 +7,6 @@ import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val viewModel = module  {
-    viewModel { AuthViewModel(socketRepository = get()) }
-    viewModel { ChatViewModel(dataSource = get()) }
+    single { AuthViewModel(socketRepository = get(), contactsDataSource = get()) }
+    single { ChatViewModel(dataSource = get(), socketRepository = get()) }
 }

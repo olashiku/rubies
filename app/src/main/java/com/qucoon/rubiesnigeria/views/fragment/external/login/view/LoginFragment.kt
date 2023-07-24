@@ -9,10 +9,11 @@ import androidx.core.widget.doAfterTextChanged
 import com.qucoon.rubiesnigeria.R
 import com.qucoon.rubiesnigeria.base.BaseFragment
 import com.qucoon.rubiesnigeria.databinding.FragmentLoginBinding
-import com.qucoon.rubiesnigeria.model.contacts.Contactslist
+import com.qucoon.rubiesnigeria.storage.PaperPrefs
+import com.qucoon.rubiesnigeria.storage.savePref
+import com.qucoon.rubiesnigeria.utils.Constant
 import com.qucoon.rubiesnigeria.utils.Validator
 import com.qucoon.rubiesnigeria.viewmodel.AuthViewModel
-import com.qucoon.rubiesnigeria.views.activity.MainActivity
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
@@ -20,6 +21,7 @@ class LoginFragment : BaseFragment() {
 
     private lateinit var binding: FragmentLoginBinding
     private val authViewModel: AuthViewModel by viewModel()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,15 +34,12 @@ class LoginFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-      //  setupObserver(authViewModel)
+        setupObserver(authViewModel)
         setupObserver()
         setupClickListener()
         observeInputText()
         getContacts()
 
-        authViewModel.showLoading.observe(viewLifecycleOwner){
-            println("loading_status $it")
-        }
     }
 
     private fun observeInputText() {
@@ -70,11 +69,9 @@ class LoginFragment : BaseFragment() {
 
     private fun setupClickListener() {
         binding.loginButton.setOnClickListener {
-            openFragment(R.id.action_loginFragment_to_navigation)
-
-//            makeActiveCalls {
-//                authViewModel.login( binding.phoneNumberEditText.text.toString())
-//            }
+            makeActiveCalls {
+                authViewModel.login( binding.phoneNumberEditText.text.toString())
+            }
         }
 
         binding.registerButton.setOnClickListener {
@@ -83,8 +80,15 @@ class LoginFragment : BaseFragment() {
     }
 
     private fun setupObserver() {
-        authViewModel.loginResponse.observe(viewLifecycleOwner) {
+        authViewModel.loginResponse.observe(viewLifecycleOwner) {response ->
+            authViewModel.fetchFriends()
             openFragment(R.id.action_loginFragment_to_navigation)
+        }
+
+
+
+        authViewModel.errorMessage.observe(viewLifecycleOwner){
+            showToast(it)
         }
     }
 

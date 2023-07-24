@@ -68,6 +68,7 @@ class MainActivity : BaseActivity() {
 
     fun makeSocketCall(action: (() -> Unit)? = null) {
         authViewModel.isOpenLiveData.observe(this) {
+            println("helowlrd $it")
             when (it) {
                 Constant.success -> {
                     action?.invoke()

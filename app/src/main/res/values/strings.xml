@@ -45,4 +45,7 @@
     <string name="lost_connection">Network Connection lost</string>
     <string name="login">Login</string>
     <string name="no_account">Don\'t have an account? please register.</string>
+    <string name="add_friend">+ Add friend</string>
+    <string name="message_friend">Send Message</string>
+
 </resources>

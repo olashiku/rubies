@@ -15,6 +15,7 @@ import org.koin.java.KoinJavaComponent.inject
 
 open class BaseSocketViewModel : ViewModel() {
 
+    val showLoading = MutableLiveData<Boolean>()
     var isOpenLiveData = MutableLiveData<String>()
     val errorMessage =  SingleLiveEvent<String>()
     val paperPrefs : PaperPrefs by inject(PaperPrefs::class.java)
@@ -23,6 +24,7 @@ open class BaseSocketViewModel : ViewModel() {
         request: R,
         crossinline makeRequest: suspend (string: S) -> Unit
     ) {
+        println("expecting_string_incoming_vm $request")
         val string = Json.encodeToString(request) as S
         viewModelScope.launch {
             makeRequest(string)
@@ -59,6 +61,7 @@ open class BaseSocketViewModel : ViewModel() {
         var result: Flow<String>? = null
         viewModelScope.launch {
             result = observeRequest()
+
         }
         return result
     }

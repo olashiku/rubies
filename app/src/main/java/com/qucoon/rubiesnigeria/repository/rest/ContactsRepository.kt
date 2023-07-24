@@ -42,7 +42,8 @@ interface ContactsRepository {
      }
 
      private fun sendPhoneContactToDatabase(contactList: ArrayList<Contactslist>) {
-       contactsDataSource.updateContacts(contactList)
+         contactsDataSource.updateContacts(contactList)
+
      }
 
  }

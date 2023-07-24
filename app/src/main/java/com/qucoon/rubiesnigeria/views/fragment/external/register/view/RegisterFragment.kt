@@ -9,6 +9,7 @@ import androidx.core.widget.doAfterTextChanged
 import com.qucoon.rubiesnigeria.R
 import com.qucoon.rubiesnigeria.base.BaseFragment
 import com.qucoon.rubiesnigeria.databinding.FragmentRegisterBinding
+import com.qucoon.rubiesnigeria.utils.Constant
 import com.qucoon.rubiesnigeria.utils.Validator
 import com.qucoon.rubiesnigeria.viewmodel.AuthViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -28,7 +29,7 @@ class RegisterFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-      //  setupObserver(authViewModel)
+         setupObserver(authViewModel)
         setupObserver()
         showBottomNavigation(false)
         setupClickListener()
@@ -38,8 +39,12 @@ class RegisterFragment : BaseFragment() {
 
 
      private fun setupObserver(){
-         authViewModel.signupResponse.observe(viewLifecycleOwner){
+         authViewModel.signupResponse.observe(viewLifecycleOwner){ response ->
              openFragment(R.id.action_registerFragment_to_navigation)
+         }
+
+         authViewModel.errorMessage.observe(viewLifecycleOwner){
+             showToast(it)
          }
      }
 
@@ -85,6 +90,7 @@ class RegisterFragment : BaseFragment() {
     private fun setupClickListener() {
         binding.proceedButton.setOnClickListener {
             makeActiveCalls {
+                showLoaderDialog(true)
                 authViewModel.register(
                     binding.phoneNumberEditText.text.toString(),
                     binding.firstNameEditText.text.toString(),

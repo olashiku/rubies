@@ -9,7 +9,7 @@ import com.qucoon.rubiesnigeria.model.contacts.Contactslist
 @Dao
 interface  ContactsDao:BaseDao<Contactslist>{
 
-    @Query("select * from Contactslist order by name  asc")
+    @Query("select * from Contactslist order by isFriend  desc")
     fun getAllContacts(): LiveData<List<Contactslist>>
 
     @Query("DELETE FROM Contactslist")
@@ -20,4 +20,8 @@ interface  ContactsDao:BaseDao<Contactslist>{
         deleteAllContacts()
         insertAll(contacts)
     }
+
+     fun updateContact(contactList: Contactslist){
+         insert(contactList)
+     }
 }

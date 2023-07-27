@@ -10,6 +10,7 @@ import com.qucoon.rubiesnigeria.repository.rest.WorkerRepository
 import com.qucoon.rubiesnigeria.storage.PaperPrefs
 import com.qucoon.rubiesnigeria.storage.room.data_source.ContactsDataSource
 import com.qucoon.rubiesnigeria.utils.CustomProgressDialog
+import com.qucoon.rubiesnigeria.utils.addBundle
 import com.qucoon.rubiesnigeria.views.activity.MainActivity
 import org.koin.android.ext.android.inject
 
@@ -17,6 +18,8 @@ interface NavigationActions {
     fun openFragment(action: Int, showBottomNavigation: Boolean = false)
     fun popFragment()
     fun openDialog(action: Int)
+    fun openFragmentWithData(action: Int, vararg value: Pair<Any, Any>)
+
 }
 
 open class BaseFragment : Fragment(), NavigationActions {
@@ -82,6 +85,10 @@ open class BaseFragment : Fragment(), NavigationActions {
 
     override fun popFragment() {
         findNavController().popBackStack()
+    }
+
+    override fun openFragmentWithData(action: Int, vararg value: Pair<Any, Any>) {
+        findNavController().navigate(action, addBundle(*value))
     }
 
     fun showToast(errorMessage: String, gravity: Int = Gravity.CENTER) {

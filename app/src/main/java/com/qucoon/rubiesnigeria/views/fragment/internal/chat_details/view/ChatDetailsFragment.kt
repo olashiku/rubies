@@ -7,11 +7,14 @@ import android.view.ViewGroup
 import com.qucoon.rubiesnigeria.R
 import com.qucoon.rubiesnigeria.base.BaseFragment
 import com.qucoon.rubiesnigeria.databinding.FragmentChatDetailsBinding
+import com.qucoon.rubiesnigeria.viewmodel.AuthViewModel
+import org.koin.android.viewmodel.ext.android.viewModel
 
 
 class ChatDetailsFragment : BaseFragment() {
 
     lateinit var binding: FragmentChatDetailsBinding
+    val authViewModel: AuthViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,12 +28,18 @@ class ChatDetailsFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         showBottomNavigation(true)
         setupClickListener()
+        authViewModel.fetchFriends()
     }
 
     private fun setupClickListener() {
         binding.statConversationButton.setOnClickListener {
             openFragment(R.id.action_chatFragment_to_contactFragment)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        showLoaderDialog(false)
     }
 
 }

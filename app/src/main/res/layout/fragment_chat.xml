@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/contactNameTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -39,8 +39,8 @@
         android:text="Tap to view details"
         android:textColor="@color/title_gray"
         android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="@+id/textView4"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintStart_toStartOf="@+id/contactNameTextView"
+        app:layout_constraintTop_toBottomOf="@+id/contactNameTextView" />
 
     <ImageView
         android:id="@+id/imageView4"
@@ -84,6 +84,7 @@
         app:layout_constraintTop_toBottomOf="@+id/view" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="76dp"
         android:background="@color/edit_text_color"
@@ -92,7 +93,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
-            android:id="@+id/imageView12"
+            android:id="@+id/sendButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="24dp"
@@ -106,10 +107,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/send_icon"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView12"
-            app:layout_constraintEnd_toEndOf="@+id/imageView12"
-            app:layout_constraintStart_toStartOf="@+id/imageView12"
-            app:layout_constraintTop_toTopOf="@+id/imageView12" />
+            app:layout_constraintBottom_toBottomOf="@+id/sendButton"
+            app:layout_constraintEnd_toEndOf="@+id/sendButton"
+            app:layout_constraintStart_toStartOf="@+id/sendButton"
+            app:layout_constraintTop_toTopOf="@+id/sendButton" />
 
         <ImageView
             android:id="@+id/imageView14"
@@ -127,13 +128,13 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/chat_background_drawable"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView12"
-            app:layout_constraintEnd_toStartOf="@+id/imageView12"
+            app:layout_constraintBottom_toBottomOf="@+id/sendButton"
+            app:layout_constraintEnd_toStartOf="@+id/sendButton"
             app:layout_constraintStart_toEndOf="@+id/imageView14"
-            app:layout_constraintTop_toTopOf="@+id/imageView12">
+            app:layout_constraintTop_toTopOf="@+id/sendButton">
 
             <EditText
-                android:id="@+id/editTextTextPersonName"
+                android:id="@+id/editTextTextChat"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -143,7 +144,7 @@
                 android:background="@null"
                 android:ems="10"
                 android:fontFamily="@font/br_firma_medium"
-                android:imeOptions="actionDone"
+                android:imeOptions="actionSend"
                 android:inputType="text"
                 android:maxLines="5"
                 android:singleLine="false"
@@ -179,6 +180,15 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/chatRecycler"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

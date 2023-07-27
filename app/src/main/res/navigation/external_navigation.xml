@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_splashScreenFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_splashScreenFragment_to_navigation"
+            app:destination="@id/navigation" />
     </fragment>
     <include app:graph="@navigation/navigation" />
     <fragment

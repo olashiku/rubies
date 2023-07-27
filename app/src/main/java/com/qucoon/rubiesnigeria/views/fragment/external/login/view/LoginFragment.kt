@@ -14,6 +14,7 @@ import com.qucoon.rubiesnigeria.storage.savePref
 import com.qucoon.rubiesnigeria.utils.Constant
 import com.qucoon.rubiesnigeria.utils.Validator
 import com.qucoon.rubiesnigeria.viewmodel.AuthViewModel
+import com.qucoon.rubiesnigeria.views.activity.MainActivity
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
@@ -39,7 +40,6 @@ class LoginFragment : BaseFragment() {
         setupClickListener()
         observeInputText()
         getContacts()
-
     }
 
     private fun observeInputText() {
@@ -70,7 +70,8 @@ class LoginFragment : BaseFragment() {
     private fun setupClickListener() {
         binding.loginButton.setOnClickListener {
             makeActiveCalls {
-                authViewModel.login( binding.phoneNumberEditText.text.toString())
+                authViewModel.fetchFriends()
+             //   authViewModel.login( binding.phoneNumberEditText.text.toString())
             }
         }
 

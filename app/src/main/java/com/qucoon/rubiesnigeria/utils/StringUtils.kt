@@ -17,6 +17,10 @@ fun String.getInitials(): String {
 }
 
 
+ fun String.cleanString():String{
+   return  this.replace("\\s".toRegex(), "")
+ }
+
 fun cleanContact(list: List<Contactslist>): MutableList<Contactslist> {
     val filteredList = mutableListOf<Contactslist>()
     val myset = listOf("#", "*")

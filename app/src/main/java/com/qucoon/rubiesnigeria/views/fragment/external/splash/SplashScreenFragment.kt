@@ -9,6 +9,7 @@ import com.qucoon.rubiesnigeria.BuildConfig
 import com.qucoon.rubiesnigeria.R
 import com.qucoon.rubiesnigeria.base.BaseFragment
 import com.qucoon.rubiesnigeria.databinding.FragmentSplashScreenBinding
+import com.qucoon.rubiesnigeria.storage.PaperPrefs
 import com.qucoon.rubiesnigeria.utils.Utils
 
 
@@ -39,7 +40,12 @@ class SplashScreenFragment : BaseFragment() {
 
     private fun launchScreen(){
          lifecycleScope.launchWhenResumed {
-             openFragment(R.id.action_splashScreenFragment_to_loginFragment)
+             if( paperPrefs.getBooleanFromPref(PaperPrefs.HAS_ENROLLED)){
+                 openFragment(R.id.action_splashScreenFragment_to_navigation)
+
+             }else {
+                 openFragment(R.id.action_splashScreenFragment_to_loginFragment)
+             }
          }
      }
 

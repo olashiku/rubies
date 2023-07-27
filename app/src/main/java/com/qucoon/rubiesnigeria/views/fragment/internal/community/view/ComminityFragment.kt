@@ -34,4 +34,9 @@ class ComminityFragment : BaseFragment()  {
 
      }
 
+    override fun onResume() {
+        super.onResume()
+        showLoaderDialog(false)
+    }
+
 }

@@ -14,10 +14,8 @@ import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.qucoon.rubiesnigeria.R
 import com.qucoon.rubiesnigeria.base.BaseActivity
 import com.qucoon.rubiesnigeria.databinding.ActivityMainBinding
-import com.qucoon.rubiesnigeria.repository.rest.WorkerRepository
 import com.qucoon.rubiesnigeria.utils.Constant
 import com.qucoon.rubiesnigeria.viewmodel.AuthViewModel
-import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class MainActivity : BaseActivity() {
@@ -34,9 +32,9 @@ class MainActivity : BaseActivity() {
         setContentView(binding.root)
         initializeNavigation()
         setupView()
-        openSocketConnectivity()
         makeSocketCall()
         requestPermission()
+        authViewModel.openConnection()
     }
 
     private fun requestPermission() {
@@ -58,17 +56,13 @@ class MainActivity : BaseActivity() {
     }
 
 
-    private fun openSocketConnectivity() {
+    fun openSocketConnectivity() {
         authViewModel.openConnection()
     }
 
-    private fun closeSocketConnectivity() {
-        authViewModel.closeConnection()
-    }
 
     fun makeSocketCall(action: (() -> Unit)? = null) {
         authViewModel.isOpenLiveData.observe(this) {
-            println("helowlrd $it")
             when (it) {
                 Constant.success -> {
                     action?.invoke()
@@ -79,7 +73,6 @@ class MainActivity : BaseActivity() {
                         .show()
                 }
                 else -> {
-                    println("helloworld $it")
                     Toast.makeText(this, " helloworld $it", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -107,21 +100,17 @@ class MainActivity : BaseActivity() {
 
     override fun onPause() {
         super.onPause()
-        closeSocketConnectivity()
+      //  authViewModel.closeConnection()
     }
 
     override fun onStop() {
         super.onStop()
-        closeSocketConnectivity()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        openSocketConnectivity()
+      //  authViewModel.closeConnection()
     }
 
     override fun onRestart() {
-        super.onStart()
-        openSocketConnectivity()
+        super.onRestart()
+     //   authViewModel.openConnection()
     }
+
 }

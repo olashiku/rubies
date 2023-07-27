@@ -22,6 +22,7 @@ class PaperPrefs {
     companion object {
         val AUTHORIZATION_TOKEN = "AUTHORIZATION_TOKEN"
         val USER_PHONE = "USER_PHONE"
+        val HAS_ENROLLED = "HAS_ENROLLED"
     }
 
 

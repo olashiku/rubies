@@ -29,4 +29,9 @@ class WalletFragment : BaseFragment() {
         showBottomNavigation(true)
     }
 
+
+    override fun onResume() {
+        super.onResume()
+        showLoaderDialog(false)
+    }
 }

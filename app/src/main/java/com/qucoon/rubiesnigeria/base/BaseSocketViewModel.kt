@@ -24,7 +24,6 @@ open class BaseSocketViewModel : ViewModel() {
         request: R,
         crossinline makeRequest: suspend (string: S) -> Unit
     ) {
-        println("expecting_string_incoming_vm $request")
         val string = Json.encodeToString(request) as S
         viewModelScope.launch {
             makeRequest(string)

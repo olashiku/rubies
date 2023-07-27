@@ -24,6 +24,7 @@ class ContactFragment : BaseFragment() {
     private lateinit var binding: FragmentContactBinding
     val chatViewModel: ChatViewModel by inject()
     val authViewModel: AuthViewModel by inject()
+    lateinit var selectedContact : Contactslist
 
     var contactslists: List<Contactslist> = emptyList()
 
@@ -47,7 +48,7 @@ class ContactFragment : BaseFragment() {
 
      private fun setupObserver(){
          authViewModel.addFriendResponse.observe(viewLifecycleOwner){
-             // TODO: perform action here.
+           //  openFragmentWithData(R.id.action_contactFragment_to_chatScreenFragment,"contact" to selectedContact)
          }
 
      }
@@ -94,9 +95,10 @@ class ContactFragment : BaseFragment() {
 
                 actionButton.setOnClickListener {
                     if (contactslists.get(position).isFriend.equals(Constant.no)) {
+                        selectedContact = contactslists.get(position)
                         addFriendToList(position)
                     } else {
-                        openChatScreen()
+                        openChatScreen(contactslists.get(position))
                     }
                 }
             },
@@ -109,9 +111,13 @@ class ContactFragment : BaseFragment() {
         }
     }
 
-    private fun openChatScreen() {
-        openFragment(R.id.action_contactFragment_to_chatScreenFragment)
+    private fun openChatScreen(contact: Contactslist) {
+        openFragmentWithData(R.id.action_contactFragment_to_chatScreenFragment,"contact" to contact)
     }
 
+    override fun onResume() {
+        super.onResume()
+        showLoaderDialog(false)
+    }
 
 }

@@ -9,6 +9,8 @@ import androidx.core.widget.doAfterTextChanged
 import com.qucoon.rubiesnigeria.R
 import com.qucoon.rubiesnigeria.base.BaseFragment
 import com.qucoon.rubiesnigeria.databinding.FragmentRegisterBinding
+import com.qucoon.rubiesnigeria.storage.PaperPrefs
+import com.qucoon.rubiesnigeria.storage.savePref
 import com.qucoon.rubiesnigeria.utils.Constant
 import com.qucoon.rubiesnigeria.utils.Validator
 import com.qucoon.rubiesnigeria.viewmodel.AuthViewModel
@@ -40,6 +42,7 @@ class RegisterFragment : BaseFragment() {
 
      private fun setupObserver(){
          authViewModel.signupResponse.observe(viewLifecycleOwner){ response ->
+             paperPrefs.savePref(PaperPrefs.HAS_ENROLLED,true)
              openFragment(R.id.action_registerFragment_to_navigation)
          }
 

@@ -20,7 +20,7 @@ class SocketRepositoryImpl(networkProvider: NetworkProvider) :SocketRepository, 
     }
 
     override suspend fun sendMessage(message: String) {
-        sendSocketMessage(message)
+        sendSocketMessage<String>(message)
     }
 
     override suspend fun observeRequest(): Flow<String> {

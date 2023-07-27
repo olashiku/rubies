@@ -10,4 +10,4 @@ data class Contactslist(
     val name: String,
     val phonenumber: String,
     val isFriend:String
-)
+):java.io.Serializable

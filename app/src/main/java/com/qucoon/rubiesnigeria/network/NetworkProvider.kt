@@ -19,35 +19,13 @@ class NetworkProvider {
 
     val paperPref: PaperPrefs by KoinJavaComponent.inject(PaperPrefs::class.java)
 
-    var client = HttpClient(Android) {
-        install(Logging) {
-            level = LogLevel.ALL
-        }
-        install(JsonFeature) {
-            serializer = KotlinxSerializer(json)
-        }
-
-        defaultRequest {
-            header("Content-Type", "application/json")
-            header("Authorization",paperPref.getStringPref(PaperPrefs.AUTHORIZATION_TOKEN))
-        }
-
-        install(HttpTimeout) {
-            requestTimeoutMillis = 15000L
-            connectTimeoutMillis = 15000L
-            socketTimeoutMillis = 15000L
-        }
-    }
-
     val socketClient = HttpClient(CIO) {
-        install(WebSockets){
-        }
-        install(Logging) {
-            level = LogLevel.ALL
-        }
-        defaultRequest {
-            header("Authorization",paperPref.getStringPref(PaperPrefs.AUTHORIZATION_TOKEN))
-        }
+        install(WebSockets)
+        install(Logging)
+
+//        defaultRequest {
+//            header("Authorization",paperPref.getStringPref(PaperPrefs.AUTHORIZATION_TOKEN))
+//        }
     }
 }
 

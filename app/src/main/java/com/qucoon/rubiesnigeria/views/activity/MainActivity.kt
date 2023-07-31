@@ -15,7 +15,11 @@ import com.qucoon.rubiesnigeria.R
 import com.qucoon.rubiesnigeria.base.BaseActivity
 import com.qucoon.rubiesnigeria.databinding.ActivityMainBinding
 import com.qucoon.rubiesnigeria.utils.Constant
+import com.qucoon.rubiesnigeria.utils.Utils
 import com.qucoon.rubiesnigeria.viewmodel.AuthViewModel
+import com.qucoon.rubiesnigeria.viewmodel.ScarletResponseViewModel
+import com.qucoon.rubiesnigeria.viewmodel.ScarletSocketViewModel
+import kotlinx.coroutines.delay
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class MainActivity : BaseActivity() {
@@ -24,6 +28,8 @@ class MainActivity : BaseActivity() {
     private lateinit var navController: NavController
     private lateinit var binding: ActivityMainBinding
     private val authViewModel: AuthViewModel by viewModel()
+    private val scarletSocketViewModel : ScarletSocketViewModel by viewModel()
+    private val scarletResponseViewModel: ScarletResponseViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,8 +40,20 @@ class MainActivity : BaseActivity() {
         setupView()
         makeSocketCall()
         requestPermission()
-        authViewModel.openConnection()
+        scarletSocketViewModel.openConnection()
+        scarletResponseViewModel.getAndAssignResponse()
     }
+
+      fun  checkConnectionStatus(performSocketOperation:()->Unit){
+         if(scarletSocketViewModel.checkSocketConnection()){
+             performSocketOperation.invoke()
+         } else{
+             Toast.makeText(this, getString(R.string.lost_connection), Toast.LENGTH_SHORT)
+                 .show()
+         }
+      }
+
+
 
     private fun requestPermission() {
         ActivityCompat.requestPermissions(
@@ -108,9 +126,9 @@ class MainActivity : BaseActivity() {
       //  authViewModel.closeConnection()
     }
 
-    override fun onRestart() {
-        super.onRestart()
-     //   authViewModel.openConnection()
+    override fun onResume() {
+        super.onResume()
+        scarletResponseViewModel.getAndAssignResponse()
     }
 
 }

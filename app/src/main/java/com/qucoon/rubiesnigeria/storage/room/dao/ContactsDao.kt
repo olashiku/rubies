@@ -9,12 +9,11 @@ import com.qucoon.rubiesnigeria.model.contacts.Contactslist
 @Dao
 interface  ContactsDao:BaseDao<Contactslist>{
 
-    @Query("select * from Contactslist order by isFriend  desc")
+    @Query("select distinct id, name, phonenumber,isFriend from Contactslist order by isFriend  desc")
     fun getAllContacts(): LiveData<List<Contactslist>>
 
     @Query("DELETE FROM Contactslist")
     fun deleteAllContacts()
-
 
     @Query("update Contactslist set isFriend=:status where id=:id")
     fun updateFriendStatus(status:String,id:Int)

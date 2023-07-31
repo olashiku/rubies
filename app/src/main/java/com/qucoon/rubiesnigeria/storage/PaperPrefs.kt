@@ -23,6 +23,8 @@ class PaperPrefs {
         val AUTHORIZATION_TOKEN = "AUTHORIZATION_TOKEN"
         val USER_PHONE = "USER_PHONE"
         val HAS_ENROLLED = "HAS_ENROLLED"
+        val AUTH_TOKEN = "AUTH_KEY"
+        val LOGIN_USERNAME = "LOGIN_USERNAME"
     }
 
 

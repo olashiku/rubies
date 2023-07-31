@@ -17,13 +17,14 @@ import com.qucoon.rubiesnigeria.storage.PaperPrefs
 import com.qucoon.rubiesnigeria.storage.getStringPref
 import com.qucoon.rubiesnigeria.utils.*
 import com.qucoon.rubiesnigeria.viewmodel.ChatViewModel
+import com.qucoon.rubiesnigeria.viewmodel.SocketAuthenticationViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
 class ChatScreenFragment : BaseFragment() {
 
     lateinit var binding: FragmentChatBinding
-    val chatViewModel: ChatViewModel by viewModel()
+    val chatViewModel: SocketAuthenticationViewModel by viewModel()
     private val contact: Contactslist by argument("contact")
 
     override fun onCreateView(
@@ -43,6 +44,7 @@ class ChatScreenFragment : BaseFragment() {
     }
 
     private fun setupObserver() {
+        println("selected_contact ${contact.phonenumber}  ${paperPrefs.getStringPref(PaperPrefs.USER_PHONE)}")
         chatViewModel.getChatByRecipient(contact.phonenumber).observe(viewLifecycleOwner) {
             setupChatRecycler(it)
         }
@@ -104,8 +106,12 @@ class ChatScreenFragment : BaseFragment() {
 
     private fun messagingAction() {
         if (checkEmptyInput()) {
-            chatViewModel.sendMessages(binding.editTextTextChat.getString(),contact.phonenumber,paperPrefs.getStringPref(PaperPrefs.USER_PHONE))
-            binding.editTextTextChat.text.clear()
+
+            makeActiveCalls {
+                chatViewModel.sendMessages(binding.editTextTextChat.getString(),contact.phonenumber,paperPrefs.getStringPref(PaperPrefs.USER_PHONE))
+                binding.editTextTextChat.text.clear()
+            }
+
         }
     }
 

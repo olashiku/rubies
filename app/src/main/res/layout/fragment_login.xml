@@ -96,6 +96,7 @@
             android:fontFamily="@font/br_firma_regular"
             android:imeOptions="actionDone"
             android:inputType="phone"
+            android:text="07057479534"
             android:textSize="14sp" />
 
     </com.google.android.material.textfield.TextInputLayout>

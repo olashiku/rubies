@@ -5,8 +5,9 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
-import androidx.core.content.ContextCompat.startActivity
-
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import org.json.JSONObject
 
 
 object Utils {
@@ -23,7 +24,23 @@ object Utils {
         val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         startActivity(browserIntent)
     }
+
+    fun getSocketAction(data: String): String {
+        var obj = JSONObject(data)
+        return obj["action"] as String
+    }
 }
+
+fun <R> convertRequest(request: R): String {
+    return Gson().toJson(request)
+}
+
+inline fun <reified T> String.getObject(): T {
+    val type = object : TypeToken<T>() {}.type
+    return Gson().fromJson(this, type)
+}
+
+
 
 
 

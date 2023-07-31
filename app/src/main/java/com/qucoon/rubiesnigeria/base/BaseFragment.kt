@@ -65,7 +65,7 @@ open class BaseFragment : Fragment(), NavigationActions {
         }
     }
      fun makeActiveCalls(action:()->Unit){
-         (activity as MainActivity).makeSocketCall{
+         (activity as MainActivity).checkConnectionStatus{
              action.invoke()
          }
      }

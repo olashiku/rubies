@@ -16,6 +16,7 @@ import com.qucoon.rubiesnigeria.model.response.privatetext.PrivateTextResponse
 import com.qucoon.rubiesnigeria.model.response.signup.SignupResponse
 import com.qucoon.rubiesnigeria.network.EndPoints
 import com.qucoon.rubiesnigeria.network.SingleLiveEvent
+import com.qucoon.rubiesnigeria.repository.socket.AuthRepository
 import com.qucoon.rubiesnigeria.repository.socket.SocketRepository
 import com.qucoon.rubiesnigeria.storage.PaperPrefs
 import com.qucoon.rubiesnigeria.storage.getStringPref
@@ -33,13 +34,18 @@ class AuthViewModel(
     val chatsDataSource: ChatsDataSource
 ) : BaseSocketViewModel() {
 
-    private val loadingEndpoint =
-        setOf(EndPoints.LOGIN_ACTION, EndPoints.SIGNUP_ACTION, EndPoints.ADD_FRIEND_ACTION,EndPoints.FETCH_FRIEND_ACTION)
+    val loginResponseNew = SingleLiveEvent<LoginResponse>()
     val loginResponse = SingleLiveEvent<LoginResponse>()
     val signupResponse = SingleLiveEvent<SignupResponse>()
     val addFriendResponse = SingleLiveEvent<AddFriendResponse>()
 
     var userPhone = ""
+
+
+
+    private val loadingEndpoint =
+        setOf(EndPoints.LOGIN_ACTION, EndPoints.SIGNUP_ACTION, EndPoints.ADD_FRIEND_ACTION,EndPoints.FETCH_FRIEND_ACTION)
+
 
     fun openConnection() {
         openSocketConnection(socketRepository::openSocket)
@@ -49,10 +55,10 @@ class AuthViewModel(
         userPhone = phoneNumber
         val phone = phoneNumber.drop(1)
         showLoading.value = true
-        sendMessage(
-            LoginRequest(EndPoints.LOGIN_ACTION, "234$phone"),
-            socketRepository::sendMessage
-        )
+//        sendMessage(
+//            LoginRequest(EndPoints.LOGIN_ACTION, "234$phone"),
+//            socketRepository::sendMessage
+//        )
     }
 
     fun fetchFriends() {
@@ -67,10 +73,10 @@ class AuthViewModel(
         showLoading.value = true
         val name = "$firstName $lastName"
         val phone = phoneNumber.drop(1)
-        sendMessage(
-            SignupRequest(EndPoints.SIGNUP_ACTION, name, "234$phone"),
-            socketRepository::sendMessage
-        )
+//        sendMessage(
+//            SignupRequest(EndPoints.SIGNUP_ACTION, name, "234$phone"),
+//            socketRepository::sendMessage
+//        )
     }
 
     fun observeResponse() {
@@ -101,6 +107,9 @@ class AuthViewModel(
             EndPoints.FETCH_FRIEND_ACTION -> {
                 fetchFriendsOperation(data)
             }
+            EndPoints.FETCH_FRIEND_ACTION -> {
+                fetchFriendsOperation(data)
+            }
         }
     }
 
@@ -125,7 +134,7 @@ class AuthViewModel(
     fun fetchFriendsOperation(data: String) {
         val response = Gson().fromJson(data, FetchFriendsResponse::class.java)
         viewModelScope.launch {
-            response.friends.forEach {
+            response.friends?.forEach {
                 contactsDataSource.updateContact(
                     Contactslist(
                         0,

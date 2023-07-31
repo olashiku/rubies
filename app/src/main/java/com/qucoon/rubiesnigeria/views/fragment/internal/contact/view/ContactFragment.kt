@@ -56,7 +56,7 @@ class ContactFragment : BaseFragment() {
     private fun getLiveContacts() {
         chatViewModel.getContacts().observe(viewLifecycleOwner) {
             val cleanContacts = cleanContact(it)
-            setupRecycler(cleanContacts)
+            setupRecycler(cleanContacts.toSet().toList())
         }
     }
 

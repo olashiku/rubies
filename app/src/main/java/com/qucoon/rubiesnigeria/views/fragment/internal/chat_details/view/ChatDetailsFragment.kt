@@ -10,6 +10,7 @@ import com.qucoon.rubiesnigeria.databinding.FragmentChatDetailsBinding
 import com.qucoon.rubiesnigeria.viewmodel.AuthViewModel
 import com.qucoon.rubiesnigeria.viewmodel.ScarletSocketViewModel
 import com.qucoon.rubiesnigeria.viewmodel.SocketAuthenticationViewModel
+import com.qucoon.rubiesnigeria.views.fragment.internal.friends.adapter.FriendonRubiesFragment
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
@@ -35,7 +36,7 @@ class ChatDetailsFragment : BaseFragment() {
 
     private fun setupClickListener() {
         binding.statConversationButton.setOnClickListener {
-            openFragment(R.id.action_chatFragment_to_contactFragment)
+            openDialog(R.id.homeBottomSheetFragment)
         }
     }
 
@@ -43,5 +44,6 @@ class ChatDetailsFragment : BaseFragment() {
         super.onResume()
         showLoaderDialog(false)
     }
+
 
 }

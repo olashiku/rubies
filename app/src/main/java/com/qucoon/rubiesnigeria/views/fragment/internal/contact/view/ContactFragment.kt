@@ -40,18 +40,18 @@ class ContactFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         setupObserver(authViewModel)
         setupObserver(chatViewModel)
-        setupClickListener()
+      //  setupClickListener()
         getLiveContacts()
         setupObserver()
     }
 
 
-     private fun setupObserver(){
-         authViewModel.addFriendResponse.observe(viewLifecycleOwner){
-           //  openFragmentWithData(R.id.action_contactFragment_to_chatScreenFragment,"contact" to selectedContact)
-         }
+    private fun setupObserver(){
+        authViewModel.addFriendResponse.observe(viewLifecycleOwner){
+            //  openFragmentWithData(R.id.action_contactFragment_to_chatScreenFragment,"contact" to selectedContact)
+        }
 
-     }
+    }
 
     private fun getLiveContacts() {
         chatViewModel.getContacts().observe(viewLifecycleOwner) {
@@ -61,7 +61,7 @@ class ContactFragment : BaseFragment() {
     }
 
     private fun setupClickListener() {
-        binding.bacButtonImage.setOnClickListener { popFragment() }
+       // binding.bacButtonImage.setOnClickListener { popFragment() }
     }
 
 
@@ -112,7 +112,7 @@ class ContactFragment : BaseFragment() {
     }
 
     private fun openChatScreen(contact: Contactslist) {
-        openFragmentWithData(R.id.action_contactFragment_to_chatScreenFragment,"contact" to contact)
+        openFragmentWithData(R.id.chatScreenFragment,"contact" to contact)
     }
 
     override fun onResume() {

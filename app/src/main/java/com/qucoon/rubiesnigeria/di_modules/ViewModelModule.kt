@@ -11,12 +11,12 @@ import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val viewModel = module  {
-    single { AuthViewModel(socketRepository = get(), contactsDataSource = get(), chatsDataSource = get()) }
+    single { AuthViewModel(socketRepository = get(), friendsDataSource = get(), chatsDataSource = get()) }
     single { ChatViewModel(dataSource = get(), socketRepository = get(),chatsDataSource = get()) }
     single { ScarletSocketViewModel(scarletSocketRepository = get()) }
     single { SocketAuthenticationViewModel(scarletSocketRepository = get(),chatsDataSource = get()) }
     single { ScarletResponseViewModel(scarletSocketRepository = get()) }
-    single { RestAuthViewModel(authRepository = get()) }
+    single { RestAuthViewModel(authRepository = get(), friendsDataSource = get()) }
 
 
 

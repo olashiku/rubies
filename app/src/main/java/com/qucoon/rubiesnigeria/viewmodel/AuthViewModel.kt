@@ -22,15 +22,18 @@ import com.qucoon.rubiesnigeria.storage.PaperPrefs
 import com.qucoon.rubiesnigeria.storage.getStringPref
 import com.qucoon.rubiesnigeria.storage.room.data_source.ChatsDataSource
 import com.qucoon.rubiesnigeria.storage.room.data_source.ContactsDataSource
+import com.qucoon.rubiesnigeria.storage.room.data_source.FriendsDataSource
 import com.qucoon.rubiesnigeria.storage.savePref
 import com.qucoon.rubiesnigeria.utils.Constant
 import com.qucoon.rubiesnigeria.utils.cleanString
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.koin.android.viewmodel.ext.android.sharedViewModel
 
 class AuthViewModel(
     val socketRepository: SocketRepository,
-    val contactsDataSource: ContactsDataSource,
+    val friendsDataSource: FriendsDataSource,
     val chatsDataSource: ChatsDataSource
 ) : BaseSocketViewModel() {
 
@@ -38,6 +41,8 @@ class AuthViewModel(
     val loginResponse = SingleLiveEvent<LoginResponse>()
     val signupResponse = SingleLiveEvent<SignupResponse>()
     val addFriendResponse = SingleLiveEvent<AddFriendResponse>()
+
+//    val scarletSocketRepository: ScarletSocketViewModel by sharedViewModel()
 
     var userPhone = ""
 
@@ -134,18 +139,15 @@ class AuthViewModel(
     fun fetchFriendsOperation(data: String) {
         val response = Gson().fromJson(data, FetchFriendsResponse::class.java)
         viewModelScope.launch {
-            response.friends?.forEach {
-                contactsDataSource.updateContact(
-                    Contactslist(
-                        0,
-                        it.userName,
-                        it.userId,
-                        Constant.yes
-                    )
-                )
+            response.friends?.let {
+                GlobalScope.launch {
+                    friendsDataSource.updateFriends(response.friends)
+                }
+
             }
         }
     }
+
 
 
     private fun loginOperations(data: String) {
@@ -180,7 +182,7 @@ class AuthViewModel(
         if (response.responseCode.equals(Constant.success_code)) {
             viewModelScope.launch(Dispatchers.IO) {
                 val authentication =
-                    paperPrefs.getStringPref(PaperPrefs.USER_PHONE) + response.sender
+                    paperPrefs.getStringPref(PaperPrefs.USER_PHONE) + response.sender!!
                 chatsDataSource.updateChat(
                     Chat(
                         0,

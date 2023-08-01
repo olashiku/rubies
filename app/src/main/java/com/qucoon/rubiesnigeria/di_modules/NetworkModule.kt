@@ -13,6 +13,8 @@ import com.tinder.scarlet.Lifecycle
 import com.tinder.scarlet.Scarlet
 import com.tinder.scarlet.lifecycle.android.AndroidLifecycle
 import com.tinder.scarlet.messageadapter.gson.GsonMessageAdapter
+import com.tinder.scarlet.retry.ExponentialBackoffStrategy
+import com.tinder.scarlet.retry.LinearBackoffStrategy
 import com.tinder.scarlet.streamadapter.rxjava2.RxJava2StreamAdapterFactory
 import com.tinder.scarlet.websocket.okhttp.newWebSocketFactory
 import okhttp3.Interceptor
@@ -56,11 +58,14 @@ inline fun <reified T> createWebService(
 }
 
 inline fun <reified T>  createSocket (okHttpClient: OkHttpClient, application: Application) : T {
+    val BACKOFF_STRATEGY = LinearBackoffStrategy(3000)
     val scarletInstance = Scarlet.Builder()
+
         .webSocketFactory(okHttpClient
             .newWebSocketFactory(getRubiesSocketUrl()))
      //   .addMessageAdapterFactory(GsonMessageAdapter.Factory())
         .addStreamAdapterFactory(RxJava2StreamAdapterFactory())
+        .backoffStrategy(BACKOFF_STRATEGY)
         .lifecycle(createAppForegroundAndUserLoggedInLifecycle(application))
         .build()
 
@@ -94,6 +99,11 @@ fun headersInterceptor(paperPrefs: PaperPrefs) = Interceptor { chain ->
         .build())
 
 }
+
+val backoffStrategy = ExponentialBackoffStrategy(
+    initialDurationMillis = 5000, // Initial duration
+    maxDurationMillis = 60000, // Maximum duration
+)
 
 fun loggingInterceptor() = HttpLoggingInterceptor().apply {
     level = if (com.qucoon.rubiesnigeria.BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE

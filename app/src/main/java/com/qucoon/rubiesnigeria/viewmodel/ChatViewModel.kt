@@ -9,6 +9,7 @@ import com.qucoon.rubiesnigeria.model.request.addfriend.AddFriendRequest
 import com.qucoon.rubiesnigeria.model.request.addfriend.Friend
 import com.qucoon.rubiesnigeria.model.request.privatetext.PrivateTextRequest
 import com.qucoon.rubiesnigeria.network.EndPoints
+import com.qucoon.rubiesnigeria.network.SingleLiveEvent
 import com.qucoon.rubiesnigeria.repository.socket.SocketRepository
 import com.qucoon.rubiesnigeria.storage.PaperPrefs
 import com.qucoon.rubiesnigeria.storage.getStringPref
@@ -23,6 +24,9 @@ class ChatViewModel(
     val socketRepository: SocketRepository,
     val chatsDataSource: ChatsDataSource
 ) : BaseSocketViewModel() {
+
+    val friendObj = SingleLiveEvent<com.qucoon.rubiesnigeria.model.response.fetchfriends.Friend>()
+    val contactObj = SingleLiveEvent<Contactslist>()
 
     fun getContacts(): LiveData<List<Contactslist>> {
         return dataSource.getContacts()

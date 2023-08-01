@@ -5,5 +5,5 @@ data class PrivateTextResponse(
     val message: String,
     val responseCode: String,
     val responseMessage: String,
-    val sender: String
+    val sender: String?
 )

@@ -6,6 +6,7 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.qucoon.rubiesnigeria.repository.rest.ContactsRepository
 import com.qucoon.rubiesnigeria.storage.PaperPrefs
+import com.qucoon.rubiesnigeria.storage.savePref
 
 
 import kotlinx.coroutines.*
@@ -17,6 +18,7 @@ class GetContactFromPhoneWorker (appContext: Context, workerParams: WorkerParame
     private val job = Job()
     override val coroutineContext: CoroutineContext = Dispatchers.IO + job
      val contactsRepository: ContactsRepository by inject(ContactsRepository::class.java)
+    val paperPrefs : PaperPrefs by inject(PaperPrefs::class.java)
 
     companion object{
         val TAG = GetContactFromPhoneWorker::class.java.simpleName
@@ -25,7 +27,10 @@ class GetContactFromPhoneWorker (appContext: Context, workerParams: WorkerParame
      fun  refreshSMSList():Boolean{
        return  runBlocking {
              val needsRetry = try {
-                 contactsRepository.getContacts()
+                 if(!paperPrefs.getBooleanFromPref(PaperPrefs.IS_CONTACT_FILLED)){
+                     contactsRepository.getContacts()
+                 }
+
                  (false)
              }catch (ex:Exception){
                  Log.e(TAG,"Error : ${ex}")
@@ -40,6 +45,7 @@ class GetContactFromPhoneWorker (appContext: Context, workerParams: WorkerParame
             Log.i(TAG,"Worker Needs Retry")
             Result.retry()
         }else{
+            paperPrefs.savePref(PaperPrefs.IS_CONTACT_FILLED, true)
             Log.i("GetSMSFromPhoneWorker","Worker Successful")
             Result.success()
         }

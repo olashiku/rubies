@@ -19,6 +19,7 @@ import com.qucoon.rubiesnigeria.utils.Utils
 import com.qucoon.rubiesnigeria.viewmodel.AuthViewModel
 import com.qucoon.rubiesnigeria.viewmodel.ScarletResponseViewModel
 import com.qucoon.rubiesnigeria.viewmodel.ScarletSocketViewModel
+import com.qucoon.rubiesnigeria.viewmodel.SocketAuthenticationViewModel
 import kotlinx.coroutines.delay
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -30,6 +31,8 @@ class MainActivity : BaseActivity() {
     private val authViewModel: AuthViewModel by viewModel()
     private val scarletSocketViewModel : ScarletSocketViewModel by viewModel()
     private val scarletResponseViewModel: ScarletResponseViewModel by viewModel()
+   private val socketAuthenticationViewModel: SocketAuthenticationViewModel by viewModel()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +44,6 @@ class MainActivity : BaseActivity() {
         makeSocketCall()
         requestPermission()
         scarletSocketViewModel.openConnection()
-        scarletResponseViewModel.getAndAssignResponse()
     }
 
       fun  checkConnectionStatus(performSocketOperation:()->Unit){

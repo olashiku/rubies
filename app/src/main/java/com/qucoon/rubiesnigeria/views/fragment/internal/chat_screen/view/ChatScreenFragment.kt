@@ -106,7 +106,6 @@ class ChatScreenFragment : BaseFragment() {
 
     private fun messagingAction() {
         if (checkEmptyInput()) {
-
             makeActiveCalls {
                 chatViewModel.sendMessages(binding.editTextTextChat.getString(),contact.phonenumber,paperPrefs.getStringPref(PaperPrefs.USER_PHONE))
                 binding.editTextTextChat.text.clear()

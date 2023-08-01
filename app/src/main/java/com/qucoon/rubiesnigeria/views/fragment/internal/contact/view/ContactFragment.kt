@@ -10,23 +10,25 @@ import com.qucoon.rubiesnigeria.R
 import com.qucoon.rubiesnigeria.base.BaseFragment
 import com.qucoon.rubiesnigeria.databinding.FragmentContactBinding
 import com.qucoon.rubiesnigeria.model.contacts.Contactslist
-import com.qucoon.rubiesnigeria.utils.Constant
-import com.qucoon.rubiesnigeria.utils.cleanContact
-import com.qucoon.rubiesnigeria.utils.getInitials
-import com.qucoon.rubiesnigeria.utils.updateRecycler
+import com.qucoon.rubiesnigeria.model.response.fetchfriends.Friend
+import com.qucoon.rubiesnigeria.utils.*
 import com.qucoon.rubiesnigeria.viewmodel.AuthViewModel
 import com.qucoon.rubiesnigeria.viewmodel.ChatViewModel
+import com.qucoon.rubiesnigeria.viewmodel.RestAuthViewModel
 import org.koin.android.ext.android.inject
+import org.koin.android.viewmodel.ext.android.sharedViewModel
 
 
 class ContactFragment : BaseFragment() {
 
     private lateinit var binding: FragmentContactBinding
     val chatViewModel: ChatViewModel by inject()
+    private val restAuthViewModel: RestAuthViewModel by sharedViewModel()
     val authViewModel: AuthViewModel by inject()
     lateinit var selectedContact : Contactslist
-
+    var liveContactList = mutableListOf<Contactslist>()
     var contactslists: List<Contactslist> = emptyList()
+    private var listOfFriends: List<Friend>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,32 +42,50 @@ class ContactFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         setupObserver(authViewModel)
         setupObserver(chatViewModel)
-      //  setupClickListener()
         getLiveContacts()
-        setupObserver()
+        setupClickListener()
+        initView()
     }
 
 
-    private fun setupObserver(){
-        authViewModel.addFriendResponse.observe(viewLifecycleOwner){
-            //  openFragmentWithData(R.id.action_contactFragment_to_chatScreenFragment,"contact" to selectedContact)
-        }
+     private fun initView(){
+         triggerView(true)
+     }
 
-    }
+     private fun triggerView(status:Boolean){
+         if(status){
+             binding.gettingContactsText.show()
+             binding.swipeToRefresh.isRefreshing = true
+
+         }else{
+             binding.swipeToRefresh.isRefreshing = false
+             binding.gettingContactsText.hide()
+
+         }
+     }
 
     private fun getLiveContacts() {
         chatViewModel.getContacts().observe(viewLifecycleOwner) {
-            val cleanContacts = cleanContact(it)
-            setupRecycler(cleanContacts.toSet().toList())
+            val myList =  regularizeContacts(it as MutableList<Contactslist>)
+            if(myList.isEmpty()){ triggerView(true)} else { triggerView(false)}
+            setupRecycler(myList)
         }
+
     }
+
+     private fun regularizeContacts(contact: MutableList<Contactslist>):List<Contactslist>{
+     return   contact.sortedByDescending { it.isFriend }
+     }
 
     private fun setupClickListener() {
-       // binding.bacButtonImage.setOnClickListener { popFragment() }
+      binding.bacButtonImage.setOnClickListener { popFragment() }
     }
 
+//  I  i_have_been_called 3914
+//  I  i_have_been_called 3914
 
     private fun setupRecycler(contactslists: List<Contactslist>) {
+        println("activeContactList_total ${contactslists.size}")
         this.contactslists = contactslists
         binding.contactsRecycler.updateRecycler(
             requireContext(),
@@ -107,7 +127,7 @@ class ContactFragment : BaseFragment() {
 
     private fun addFriendToList(position: Int) {
         makeActiveCalls {
-            chatViewModel.addFriends(contactslists.get(position))
+         chatViewModel.addFriends(contactslists.get(position))
         }
     }
 

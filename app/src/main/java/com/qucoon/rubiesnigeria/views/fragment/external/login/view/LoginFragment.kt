@@ -12,6 +12,7 @@ import com.qucoon.rubiesnigeria.databinding.FragmentLoginBinding
 import com.qucoon.rubiesnigeria.storage.PaperPrefs
 import com.qucoon.rubiesnigeria.storage.savePref
 import com.qucoon.rubiesnigeria.utils.Constant
+import com.qucoon.rubiesnigeria.utils.Utils
 import com.qucoon.rubiesnigeria.utils.Validator
 import com.qucoon.rubiesnigeria.utils.getString
 import com.qucoon.rubiesnigeria.viewmodel.AuthViewModel
@@ -84,6 +85,8 @@ class LoginFragment : BaseFragment() {
 
     private fun setupObserver() {
         restAuthViewModel.loginResponseNew.observe(viewLifecycleOwner) {response ->
+            println("helloworld_")
+            Utils.delayTimer { socketAuthenticationViewModel.getFriends() }
             openFragment(R.id.action_loginFragment_to_navigation)
         }
 

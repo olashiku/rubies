@@ -15,7 +15,6 @@ import org.koin.dsl.module
 val repository = module{
     single <SocketRepository>{ SocketRepositoryImpl(networkProvider = get()) }
     single <ScarletSocketRepository> {ScarletSocketRepositoryImpl(scarletSocket = get(),contactsDataSource = get(), chatsDataSource = get(), friendsDataSource = get())}
-    single <ScarletSocketRepository> {ScarletSocketRepositoryImpl(scarletSocket = get(),contactsDataSource = get(), chatsDataSource = get(), friendsDataSource = get())}
 
     factory<ContactsRepository>{ ContactsRepositoryImpl(appContext = get(), contactsDataSource = get()) }
     factory <WorkerRepository>{ WorkerRepositoryImpl() }

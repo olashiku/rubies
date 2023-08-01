@@ -25,6 +25,7 @@ class PaperPrefs {
         val HAS_ENROLLED = "HAS_ENROLLED"
         val AUTH_TOKEN = "AUTH_KEY"
         val LOGIN_USERNAME = "LOGIN_USERNAME"
+        val IS_CONTACT_FILLED = "IS_CONTACT_FILLED"
     }
 
 

@@ -34,14 +34,13 @@ interface ContactsRepository {
                  }
              }
              sendPhoneContactToDatabase(contactList)
-         } else {
-             contactsDataSource.updateContacts(contactList)
          }
          cursor.close()
          return contactList
      }
 
      private fun sendPhoneContactToDatabase(contactList: ArrayList<Contactslist>) {
+         println("i_have_been_called ${contactList.size}")
          contactsDataSource.updateContacts(contactList)
 
      }

@@ -77,7 +77,7 @@ import org.koin.android.viewmodel.ext.android.sharedViewModel
                     when (listOfHomeData[position].title) {
                         "Friend" -> {
                             dialog?.dismiss()
-                            findNavController().navigate(R.id.friendsListFragment)
+                            findNavController().navigate(R.id.contactFragment)
                         }
                     }
 

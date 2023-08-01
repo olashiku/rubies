@@ -1,6 +1,5 @@
 package com.qucoon.rubiesnigeria.repository.socket
 
-import android.annotation.SuppressLint
 import com.qucoon.rubiesnigeria.model.chat.Chat
 import com.qucoon.rubiesnigeria.model.contacts.Contactslist
 import com.qucoon.rubiesnigeria.model.response.fetchfriends.FetchFriendsResponse
@@ -17,15 +16,12 @@ import com.qucoon.rubiesnigeria.utils.Utils
 import com.qucoon.rubiesnigeria.utils.getObject
 import com.tinder.scarlet.Message
 import com.tinder.scarlet.WebSocket
-import io.reactivex.Flowable
 import io.reactivex.disposables.Disposable
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.koin.java.KoinJavaComponent
 
 interface ScarletSocketRepository {
@@ -46,8 +42,6 @@ class ScarletSocketRepositoryImpl(val scarletSocket: ScarletSocket,
     var emptyFlowVariable = flowOf<String>()
     val paperPrefs : PaperPrefs by KoinJavaComponent.inject(PaperPrefs::class.java)
 
-
-
     override suspend fun startSocket() {
 
         disposable = scarletSocket.observeWebSocketEvent()
@@ -59,18 +53,16 @@ class ScarletSocketRepositoryImpl(val scarletSocket: ScarletSocket,
                     }
 
                     is WebSocket.Event.OnMessageReceived -> {
-                        println("requesting_receieved ${it.message}")
                         println("OnMessageReceived")
                         val message = (it.message as Message.Text).value
                         val response = Utils.getSocketAction(message)
                         when(response){
                             EndPoints.FETCH_FRIEND_ACTION2->{
-                                performFriendsAction(message)
+                                println("OnMessageReceived-----")
                                 performFriendsListAction(message)
                             }
                             EndPoints.PRIVATE_TEXT_ACTION ->{
                                 performPrivateMessageAction(message)
-
                             }
                         }
                         emptyFlowVariable = flowOf(message)
@@ -101,8 +93,6 @@ class ScarletSocketRepositoryImpl(val scarletSocket: ScarletSocket,
 
     override fun sendMessage(command: String) {
         scarletSocket.sendCommand(command)
-        println("requesting $command")
-
     }
 
     override fun observeMessage(): Flow<String> {
@@ -115,35 +105,26 @@ class ScarletSocketRepositoryImpl(val scarletSocket: ScarletSocket,
         chatsDataSource.updateChat(Chat(0,response.sender!!,paperPrefs.getStringPref(PaperPrefs.USER_PHONE),response.message,authenticationProcess))
     }
 
-
-    private fun performFriendsAction(message:String) {
-        val response = message.getObject<FetchFriendsResponse>()
-        println("my_Response $response")
-        response.friends?.let {
-            it.forEach {
-                contactsDataSource.updateContact(
-                    Contactslist(
-                        0,
-                        it.userName,
-                        it.userId,
-                        Constant.yes
-                    )
-                )
-            }
-
-        }
+    private fun singleFriend(friend: List<Friend>?):Set<Friend>{
+        return friend?.toSet()?: emptySet()
     }
-        private fun performFriendsListAction(message:String){
-            val response = message.getObject<FetchFriendsResponse>()
-            println("my_Response $response")
-            response.friends?.let {
-                GlobalScope.launch{
-                    friendsDataSource.updateFriends(response.friends)
-                }
 
+        private fun performFriendsListAction(message:String){
+
+            val response = message.getObject<FetchFriendsResponse>()
+            val friends = singleFriend(response.friends)
+
+            friends.forEach{ friend ->
+                contactsDataSource.deleteContactsByPhoneNumber(friend.userId)
             }
 
+            runBlocking(Dispatchers.IO){
 
+                    friends.forEach { friend ->
+                        contactsDataSource.updateContact(Contactslist(0,friend.userName,friend.userId,Constant.yes))
+                    }
+
+            }
 
 
     }

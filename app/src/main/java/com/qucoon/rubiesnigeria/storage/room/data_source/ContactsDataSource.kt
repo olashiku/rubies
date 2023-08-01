@@ -7,6 +7,7 @@ import com.qucoon.rubiesnigeria.storage.room.dao.ContactsDao
 interface ContactsDataSource {
     fun getContacts():LiveData<List<Contactslist>>
     fun deleteAllContacts()
+    fun deleteContactsByPhoneNumber(phonenumber:String)
     fun updateContacts(contact:  List<Contactslist>)
     fun updateContact(contact:Contactslist)
     fun updateFriendStatus(status:String,id:Int)
@@ -20,12 +21,16 @@ interface ContactsDataSource {
          contactsDao.deleteAllContacts()
      }
 
+     override fun deleteContactsByPhoneNumber(phonenumber: String) {
+       contactsDao.deleteContactByPhoneNumber(phonenumber)
+     }
+
+
      override fun updateContacts(contact: List<Contactslist>) {
          contactsDao.updateContacts(contact)
      }
 
      override fun updateContact(contact: Contactslist) {
-         println("i_have_been_called $contact")
          contactsDao.updateContact(contact)
      }
 

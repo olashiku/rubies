@@ -4,25 +4,12 @@ import com.qucoon.rubiesnigeria.model.contacts.Contactslist
 
 
 fun String.getInitials(): String {
-    println("theString $this")
-    var expectingString = ""
-    if(this.isNotEmpty()){
-        val sb = StringBuilder()
-        if(this.contains(" ")){
-
-        }else if(this.contains("  ")){
-            val mylist= this.split("  ")
-            for(i in mylist){
-                sb.append( i.get(0).uppercaseChar())
-            }
-        }else{
-            sb.append( this.get(0).uppercaseChar())
-        }
-        expectingString = sb.toString()
-    }
-
-    return expectingString
+    val regex = Regex("(^|\\s+)(\\w)")
+    val matches = regex.findAll(this)
+    val initials = matches.joinToString("") { it.groups[2]!!.value.uppercase() }
+    return initials
 }
+
 
 
  fun String.cleanString():String{

@@ -48,5 +48,6 @@
     <string name="add_friend">+ Add friend</string>
     <string name="message_friend">Send Message</string>
     <string name="auto">Auto</string>
+    <string name="we_are_getting_your_contacts">Please wait,\nWe are setting up your profile 😊</string>
 
 </resources>

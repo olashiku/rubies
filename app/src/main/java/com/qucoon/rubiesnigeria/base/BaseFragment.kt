@@ -44,7 +44,9 @@ open class BaseFragment : Fragment(), NavigationActions {
 
     fun getContacts(){
        if((activity as MainActivity).checkForPermission()){
-           workerRepository.getAllContacts()
+          if(!paperPrefs.getBooleanFromPref(PaperPrefs.IS_CONTACT_FILLED)){
+              workerRepository.getAllContacts()
+          }
        }
     }
 

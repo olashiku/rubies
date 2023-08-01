@@ -18,7 +18,6 @@ class ChatDetailsFragment : BaseFragment() {
 
     lateinit var binding: FragmentChatDetailsBinding
     val authViewModel: AuthViewModel by viewModel()
-    val socketAuthenticationViewModel: SocketAuthenticationViewModel by viewModel()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -31,7 +30,6 @@ class ChatDetailsFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         showBottomNavigation(true)
         setupClickListener()
-        socketAuthenticationViewModel.getFriends()
     }
 
     private fun setupClickListener() {

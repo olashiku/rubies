@@ -29,8 +29,7 @@ class SocketAuthenticationViewModel(
 
     fun getFriends(){
         val request = FetchFriendsRequest(EndPoints.FETCH_FRIEND_ACTION)
-        println("requesting $request")
-        scarletSocketRepository.sendMessage( convertRequest(request))
+        scarletSocketRepository.sendMessage(convertRequest(request))
     }
 
     fun getChatByRecipient(recipient:String): LiveData<List<Chat>> {
@@ -39,7 +38,7 @@ class SocketAuthenticationViewModel(
 
 
     fun sendMessages(message: String, receiver: String,sender:String) {
-        val authenticationProcess = paperPrefs.getStringPref(PaperPrefs.USER_PHONE)+receiver
+        val authenticationProcess =sender+receiver
         viewModelScope.launch(Dispatchers.IO) {
             chatsDataSource.updateChat(Chat(0,sender,receiver,message,authenticationProcess))
         }
